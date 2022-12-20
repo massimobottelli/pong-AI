@@ -15,7 +15,16 @@ An implementation of the classic game Pong using Python's turtle library. The ga
 In addition to the game logic, the code also includes functionality to store data on the ball's position and angle, as well as the right paddle's position, when the ball hits the right paddle. This data is stored in a CSV file called "dataset.csv". The code also includes a loop that restarts the game after the ball hits the right paddle for training purposes.
 
 ## Learn
-xxx
+
+This script implements the machine learning model to predict the vertical position of the paddle in the game based on the initial vertical position and angle of a ball.
+
+The code reads in a dataset from a CSV file called dataset.csv using pandas. The dataset is stored in a DataFrame called df. The features (inputs) for the machine learning model are the 'ball_y' and 'ball_angle' columns, and the target (output) is the 'paddle_y' column. These columns are extracted and stored in separate variables X, y respectively.
+
+The machine learning model itself is a random forest regressor, which is implemented using the RandomForestRegressor class from sklearn. The model is trained using the fit method, and then used to make predictions on the test set using the predict method.
+
+After training and evaluating the model, a scatter plot is created using matplotlib to compare the model's predictions with the data in the dataset for a particular value of 'ball_y'. 
+
+The model is then used to make a prediction for a new sample based on user input for the initial vertical position and angle of the ball. The predicted vertical position of the paddle is then printed.
 
 ## Play
 xxx
