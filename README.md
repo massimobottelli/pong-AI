@@ -9,7 +9,10 @@ The resulting model is able to predict the proper position of the paddle to catc
 The project is composed by three script:
 
 ## Train
-xxx
+
+An implementation of the classic game Pong using Python's turtle library. The game is played on a screen with two paddles and a ball. The ball bounces off the top and bottom edges of the screen, and when it hits one of the paddles, it bounces back and its angle is modified according to the position it hits on the paddle. For machine learning training purpose, both paddles are moved automatically, based on vertical position of the ball, with random variation to include variation of angle when hitting the ball.
+
+In addition to the game logic, the code also includes functionality to store data on the ball's position and angle, as well as the right paddle's position, when the ball hits the right paddle. This data is stored in a CSV file called "dataset.csv". The code also includes a loop that restarts the game after the ball hits the right paddle for training purposes.
 
 ## Learn
 xxx
