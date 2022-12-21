@@ -9,7 +9,7 @@ warnings.filterwarnings("ignore", category=UserWarning)
 
 # Initialize screen
 sc = turtle.Screen()
-sc.title("PONG")
+sc.title("Pong-AI")
 sc.bgcolor("black")
 sc.setup(width=1000, height=600)
 sketch = turtle.Turtle()
