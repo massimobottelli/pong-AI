@@ -4,7 +4,7 @@ This project aims to train a machine learning model to play the classic video ga
 
 To do this, I developed a Python script to play Pong and record all relevant metrics (such as paddle position and ball angle) to create a dataset. 
 This dataset is then used to train the machine learning model using scikit-learn. 
-The resulting model is able to predict the proper position of the paddle to catch the ball when the computer plays against a human player.
+The resulting model is able to predict the proper position of the AI-controlled paddle to hit the ball when the computer plays against a human player.
 
 # How to use
 
