@@ -63,7 +63,7 @@ while True:  # loop
     # automatic move left paddle
     left_pad.sety(y + random.randint(-45, 45))
 
-    # automatic move left paddle
+    # automatic move right paddle
     right_pad.sety(y + random.randint(-45, 45))
 
     # ball bounce on top and bottom edges
