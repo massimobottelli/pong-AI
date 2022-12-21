@@ -49,6 +49,7 @@ The script is similar to `train` but in `play` it loads the machine learning mod
 Use the keyboard to control the left paddle with 'e' key to move up and 'x' to move down.
 The AI controlled right paddle will predict the position of the ball when it will arrive on its side and will place accordingly.
 
+![Play Pong agains AI ](images/play.gif)
 
 
 
