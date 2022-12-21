@@ -44,6 +44,13 @@ The model is then used to make a prediction for the target vertical position of 
 ![scatter plot to compare model's predictions with dataset ](images/learn.png)
 
 ## Play
-xxx
+The script is similar to `train` but in `play` it loads the machine learning model `spline_model` from `joblib` file to predict the position of the right paddle (controlled by AI) based on the position and angle of the ball whenhit by human player.
+
+Use the keyboard to control the left paddle with 'e' key to move up and 'x' to move down.
+The AI controlled right paddle will predict the position of the ball when it will arrive on its side and will place accordingly.
+
+
+
+
 
 
