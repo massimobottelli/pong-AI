@@ -41,7 +41,7 @@ After training and evaluating the model, a scatter plot is created using `matplo
 
 The model is then used to make a prediction for a new sample based on user input for the initial vertical position and angle of the ball. The predicted vertical position of the paddle is then printed.
 
-![scatter plot to compare model's predictions with dataset ](images/learn.png | width=50% )
+![scatter plot to compare model's predictions with dataset ](images/learn.png)
 
 ## Play
 xxx
