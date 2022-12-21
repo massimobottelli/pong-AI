@@ -39,7 +39,7 @@ The machine learning model is a random forest regressor, which is implemented us
 
 After training and evaluating the model, a scatter plot is created using `matplotlib` to compare the model's predictions with the data in the dataset for a particular value of `ball_y`. 
 
-The model is then used to make a prediction for a new sample based on user input for the initial vertical position and angle of the ball. The predicted vertical position of the paddle is then printed.
+The model is then used to make a prediction for target vertical position of the paddle, based on user input for the initial vertical position and angle of the ball.
 
 ![scatter plot to compare model's predictions with dataset ](images/learn.png)
 
