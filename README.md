@@ -1,6 +1,6 @@
 # Pong AI
 
-This project aims to train a machine learning model to play the classic video game Pong against a human opponent.
+This project aims to train a machine learning model to play the classic video game Pong.
 
 To do this, I developed a Python script to play Pong and record all relevant metrics (such as paddle position and ball angle) to create a dataset. 
 This dataset is then used to train the machine learning model using scikit-learn. 
