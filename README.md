@@ -26,7 +26,7 @@ For machine learning training purpose, both paddles are moved automatically, bas
 In addition to the game logic, the code also includes functionality to store data on the ball's position and angle, as well as the right paddle's position, when the ball hits the right paddle. 
 This data is stored in a CSV file called `dataset.csv`. The code also includes a loop that restarts the game after the ball hits the right paddle for training purposes.
 
-![Pong training](/assets/images/train.png)
+![Pong training](images/train.png)
 
 ## Learn
 
@@ -41,7 +41,7 @@ After training and evaluating the model, a scatter plot is created using `matplo
 
 The model is then used to make a prediction for a new sample based on user input for the initial vertical position and angle of the ball. The predicted vertical position of the paddle is then printed.
 
-![scatter plot to compare model's predictions with dataset ](/assets/images/train.png)
+![scatter plot to compare model's predictions with dataset ](images/learn.png | width=50% )
 
 ## Play
 xxx
