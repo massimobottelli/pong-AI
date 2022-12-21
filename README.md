@@ -35,11 +35,11 @@ This script implements the machine learning model to predict the vertical positi
 The code reads in a dataset from `dataset.csv` using pandas. The dataset is stored in a DataFrame called df. 
 The features (inputs) for the machine learning model are the `ball_y` and `ball_angle` columns, and the target (output) is the `paddle_y` column. These columns are extracted and stored in separate variables X, y respectively.
 
-The machine learning model is a random forest regressor, which is implemented using the `RandomForestRegressor` class from `sklearn`. The model is trained using the fit method, and then used to make predictions on the test set using the predict method.
+The machine learning model is the Random Forest Regressor, which is implemented using the `RandomForestRegressor` class from `sklearn`. The model is trained using the fit method, and then the model is stored to disk using `joblib`.
 
-After training and evaluating the model, a scatter plot is created using `matplotlib` to compare the model's predictions with the data in the dataset for a particular value of `ball_y`. 
+After training and evaluating the model, a scatter plot is created using `matplotlib` to compare the model's predictions with the data in the dataset for a particular value of `ball_angle`. 
 
-The model is then used to make a prediction for target vertical position of the paddle, based on user input for the initial vertical position and angle of the ball.
+The model is then used to make a prediction for the target vertical position of the paddle, based on user input for the initial vertical position and angle of the ball. This prediction will be used at every iteraction during the game. 
 
 ![scatter plot to compare model's predictions with dataset ](images/learn.png)
 
