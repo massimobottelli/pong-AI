@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import warnings
+from joblib import dump
 
 from sklearn.pipeline import Pipeline
 from sklearn.model_selection import train_test_split
@@ -15,9 +16,10 @@ df = pd.read_csv("dataset.csv", header=0)
 X = df[['ball_y', 'ball_angle']]
 y = df['paddle_y']
 
+spline_model = Pipeline([('spline', RandomForestRegressor(n_estimators=800))])
+
 # evaluate model
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-spline_model = Pipeline([('spline', RandomForestRegressor(n_estimators=800))])
 spline_model.fit(X_train, y_train)
 y_pred = spline_model.predict(X_test)
 scores = cross_val_score(spline_model, X, y, cv=5)
@@ -45,9 +47,11 @@ plt.savefig("plot-spline-"+str(set_ball_y)+".png")
 plt.pause(2)
 plt.close()
 
-
-# sample prediction
+# train model on full dataset and store to joblib file
 spline_model.fit(X, y)
+dump(spline_model, 'spline_model.joblib')
+
+# user input based prediction
 set_ball_y = float(input("\nInsert initial ball position (y = -260/+260): "))
 set_ball_angle = float(input("Insert initial ball angle (a = 100/260): "))
 prediction_paddle_y = spline_model.predict([[set_ball_y, set_ball_angle]])
