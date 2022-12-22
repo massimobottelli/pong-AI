@@ -3,6 +3,7 @@ import turtle
 import math
 import random
 import warnings
+import time
 from joblib import load
 
 warnings.filterwarnings("ignore", category=UserWarning)
@@ -89,7 +90,8 @@ sc.onkeypress(paddle_a_up, "e")
 sc.onkeypress(paddle_a_down, "x")
 
 sketch.clear()
-sketch.write("HUMAN: " + str(score_human) + spacer + "AI: " + str(score_ai), align="center", font=("helvetica", 24, "normal"))
+sketch.write("HUMAN: " + str(score_human) + spacer + "AI: " + str(score_ai),
+             align="center", font=("helvetica", 24, "normal"))
 
 while True:  # loop
     sc.update()
@@ -101,11 +103,6 @@ while True:  # loop
     y = int(y + dy)
     ball.setx(x)
     ball.sety(y)
-
-    # automatic move right paddle
-    if 'store_ball_y' in vars() and 'store_ball_angle' in vars():
-        prediction_paddle_y = spline_model.predict([[store_ball_y, store_ball_angle]])
-        right_pad.sety(int(prediction_paddle_y)+random.randint(-5,5))
 
     # ball bounce on top and bottom edges
     if y > 280:
@@ -125,9 +122,9 @@ while True:  # loop
             angle = angle + 360
         x = -365
 
-        # store ball vert position and angle on contact with left paddle
-        store_ball_y = y
-        store_ball_angle = angle
+        # move right paddle to predicted position
+        prediction_paddle_y = spline_model.predict([[y, angle]])
+        right_pad.sety(int(prediction_paddle_y) + random.randint(-5, 5))
 
     # detect ball collision with right paddle
     if (370 < ball.xcor() < 390) and (
@@ -139,15 +136,15 @@ while True:  # loop
     # if ball over paddle then start new game
     if x > 500 or x < -500:
         if x > 500:
-            score_human+=1
+            score_human += 1
         else:
-            score_ai+=1
+            score_ai += 1
         x = 0
         y = 0
         angle = random.randint(-5, 5)
         direction = -1
         sketch.clear()
-        sketch.write("HUMAN: " + str(score_human) + spacer + "AI: " + str(score_ai), align="center",
-                     font=("helvetica", 24, "normal"))
-
-
+        sketch.write("HUMAN: " + str(score_human) + spacer + "AI: " + str(score_ai),
+                     align="center", font=("helvetica", 24, "normal"))
+        time.sleep(1)
+        
