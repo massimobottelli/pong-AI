@@ -143,6 +143,8 @@ while True:  # loop
         y = 0
         angle = random.randint(-5, 5)
         direction = -1
+        left_pad.goto(-400, 0)
+
         sketch.clear()
         sketch.write("HUMAN: " + str(score_human) + spacer + "AI: " + str(score_ai),
                      align="center", font=("helvetica", 24, "normal"))
