@@ -9,7 +9,7 @@ The resulting model is able to predict the proper position of the AI-controlled 
 # How to use
 
 1. Run `train.py` to start training the model. The script will automatically play Pong and record the necessary data to create the dataset. 
-2. Once the dataset big enough (2000 to 3000 records recommended), run `learn.py` to train the machine learning model.
+2. Once the dataset big enough (minimum 500 records recommended), run `learn.py` to train the machine learning model.
 3. After the AI training, run `play.py` to play Pong against AI. 
 
 # How it works
