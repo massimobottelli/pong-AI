@@ -2,8 +2,8 @@
 
 This project aims to train a machine learning model to play the classic video game Pong.
 
-To do this, I developed a Python script to play Pong and record all relevant metrics (such as paddle position and ball angle) to create a dataset. 
-This dataset is then used to train the machine learning model with supervised learming approach, using scikit-learn. 
+Do do this, I implemented the supervised learning paradigm: while playing Pong, the script creates a dataset with features and target, by recording the relevant metrics (such as paddle position and ball angle). 
+This dataset is then used to train the machine learning model, using Python library `scikit-learn`. 
 The resulting model is able to predict the proper position of the AI-controlled paddle to hit the ball when the computer plays against a human player.
 
 # How to use
