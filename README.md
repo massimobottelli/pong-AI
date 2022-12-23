@@ -3,7 +3,9 @@
 This project aims to train a machine learning model to play the classic video game Pong.
 
 Do do this, I implemented the supervised learning paradigm: while playing Pong, the script creates a dataset with features and target, by recording the relevant metrics (such as paddle position and ball angle). 
-This dataset is then used to train the machine learning model, using Python library `scikit-learn`. 
+
+This dataset is then processed using Python library `scikit-learn` to train the machine learning with a proper regression model. 
+
 The resulting model is able to predict the proper position of the AI-controlled paddle to hit the ball when the computer plays against a human player.
 
 # How to use
@@ -19,11 +21,13 @@ The project is composed by three script:
 ## Train
 
 Training is based on a simple implementation of the classic game Pong using Python's turtle library. 
-The game is played on a screen with two paddles and a ball. 
-The ball bounces off the top and bottom edges of the screen, and when it hits one of the paddles, it bounces back and its angle is modified according to the position it hits on the paddle. 
-For machine learning training purpose, both paddles are moved automatically, based on vertical position of the ball, with random variation to include variation of angle when hitting the ball.
 
-In addition to the game logic, the code also includes functionality to store data on the ball's position and angle, as well as the right paddle's position, when the ball hits the right paddle. 
+The game is played on a screen with two paddles and a ball. The ball bounces off the top and bottom edges of the screen, and when it hits one of the paddles, it bounces back and its angle is modified according to the position it hits on the paddle.
+
+For machine learning training purpose, both paddles are moved automatically based on vertical position of the ball, with random variation to include variation of angle when hitting the ball.
+
+In addition to the game logic, the code also includes functionality to store data on the ball's position and angle (features), as well as the right paddle's position (target), when the ball hits the right paddle.
+
 This data is stored in a CSV file called `dataset.csv`. The code also includes a loop that restarts the game after the ball hits the right paddle for training purposes.
 
 ![Pong training](images/train.png)
