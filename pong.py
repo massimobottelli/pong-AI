@@ -79,9 +79,14 @@ while True:  # loop
     # initialize game
     x = 0
     y = 0
-    angle = random.randint(-5, 5)
+    angle = random.randint(-10, 10)
     speed = 20
-    direction = -1
+    if mode == 2:
+        # play mode: right
+        direction = -1
+    else:
+        # train mode: left
+        direction = 1
     score_human = 0
     score_ai = 0
     spacer = ""
@@ -101,9 +106,9 @@ while True:  # loop
     if mode == 2:  # play mode
         # import the machine learning model
         spline_model = load('spline_model.joblib')
+        left_pad.goto(-400, 0)
 
     while True:  # loop
-
         sc.update()
 
         # calculate ball motion
@@ -116,7 +121,7 @@ while True:  # loop
 
         if mode == 1:  # train mode
             # automatic move paddles for training
-            right_pad.sety(y + random.randint(-45, 45))
+            right_pad.sety(y) # + random.randint(-45, 45)
 
         # ball bounce on top and bottom edges
         if y > 280:
@@ -165,6 +170,10 @@ while True:  # loop
                     f.close()
                     # when dataset size reached, then train model
                     cont += 1
+                    if mode == 1:  # train mode
+                        sketch.clear()
+                        sketch.write("Dataset size: " + str(cont) + "/" + str(size), align="center", font=("helvetica", 24, "normal"))
+
                     if cont == size:
                         print("Dataset complete, training model...")
                         df = pd.read_csv("dataset.csv", header=0)
@@ -178,19 +187,6 @@ while True:  # loop
                         time.sleep(2)
                         break
 
-                '''# restart after right paddle hit - for training purpose
-                x = 0
-                y = 0
-                angle = random.randint(-5, 5)
-                direction = -1
-                # reset data if already defined
-                if 'store_ball_y' in vars():
-                    del store_ball_y
-                if 'store_ball_angle' in vars():
-                    del store_ball_angle
-                if 'store_paddle_y' in vars():
-                    del store_paddle_y'''
-
         # if ball over paddle then start new game
         if x > 500 or x < -500:
 
@@ -202,9 +198,14 @@ while True:  # loop
 
             x = 0
             y = 0
-            angle = random.randint(-5, 5)
-            direction = -1
+            angle = random.randint(-10, 10)
             left_pad.goto(-400, 0)
+            if mode == 2:
+                # play mode: right
+                direction = -1
+            else:
+                # train mode: left
+                direction = 1
 
             if mode == 1:  # train mode
                 # reset data if already defined
