@@ -140,10 +140,12 @@ while True:  # loop
             while angle < 0:
                 angle = angle + 360
             x = -365
+            # position of left paddle when hit the ball
+            y0 = left_pad.ycor()
 
             if mode == 2:  # play mode
                 # move right paddle to predicted position
-                prediction_paddle_y = spline_model.predict([[y, angle]])
+                prediction_paddle_y = spline_model.predict([[y0, angle]])
                 right_pad.sety(int(prediction_paddle_y) + random.randint(-5, 5))
 
             if mode == 1:  # train mode
