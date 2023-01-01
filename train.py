@@ -1,14 +1,23 @@
-# Import required library
 import turtle
 import math
 import random
 import os
 
+# Constants
+SCREEN_WIDTH = 1000
+SCREEN_HEIGHT = 600
+PADDLE_WIDTH = 4
+PADDLE_LENGTH = 1
+PADDLE_SPEED = 20
+BALL_SPEED = 20
+
 # Initialize screen
 sc = turtle.Screen()
-sc.title("PONG")
+sc.title("Pong-AI Training")
 sc.bgcolor("black")
-sc.setup(width=1000, height=600)
+sc.setup(width=SCREEN_WIDTH, height=SCREEN_HEIGHT)
+
+# Draw center line
 sketch = turtle.Turtle()
 sketch.speed(0)
 sketch.color("white")
@@ -21,7 +30,7 @@ left_pad = turtle.Turtle()
 left_pad.speed(0)
 left_pad.shape("square")
 left_pad.color("white")
-left_pad.shapesize(stretch_wid=4, stretch_len=1)
+left_pad.shapesize(stretch_wid=PADDLE_WIDTH, stretch_len=PADDLE_LENGTH)
 left_pad.penup()
 left_pad.goto(-400, 0)
 
@@ -30,29 +39,31 @@ right_pad = turtle.Turtle()
 right_pad.speed(0)
 right_pad.shape("square")
 right_pad.color("white")
-right_pad.shapesize(stretch_wid=4, stretch_len=1)
+right_pad.shapesize(stretch_wid=PADDLE_WIDTH, stretch_len=PADDLE_LENGTH)
 right_pad.penup()
 right_pad.goto(400, 0)
 
 # Draw ball
 ball = turtle.Turtle()
-ball.speed(50)
+ball.speed(0)
 ball.shape("square")
 ball.color("white")
 ball.penup()
 ball.goto(0, 0)
 
-# initialize ball
+# Initialize ball
 x = 0
 y = 0
+store_ball_y = 0
+store_ball_angle = 0
+paddle_y = 0
 angle = random.randint(-45, 45)
-speed = 20
+speed = BALL_SPEED
 direction = -1
 
-
-while True:  # loop
-
-    # calculate ball motion
+def move_ball():
+    """Calculate and update ball position based on angle and speed"""
+    global x, y
     dx = speed * math.cos(math.radians(angle)) * direction
     dy = speed * math.sin(math.radians(angle)) * direction
     x = int(x + dx)
@@ -60,13 +71,13 @@ while True:  # loop
     ball.setx(x)
     ball.sety(y)
 
-    # automatic move left paddle
-    left_pad.sety(y + random.randint(-45, 45))
+def move_paddle(paddle, y):
+    """Move paddle to specified y-coordinate"""
+    paddle.sety(y)
 
-    # automatic move right paddle
-    right_pad.sety(y + random.randint(-45, 45))
-
-    # ball bounce on top and bottom edges
+def bounce_ball():
+    """Bounce ball on top and bottom edges and update angle"""
+    global angle, x, y
     if y > 280:
         y = 275
         angle = -angle
@@ -74,62 +85,71 @@ while True:  # loop
         y = -275
         angle = -angle
 
-    # detect ball collision with left paddle
-    if (-370 > ball.xcor() > -390) and (
-            left_pad.ycor() + 40 > ball.ycor() > left_pad.ycor() - 40):
-        angle = 180 - angle + y - left_pad.ycor()  # angle modified according to impact position
-        while angle > 360:
-            angle = angle - 360
-        while angle < 0:
-            angle = angle + 360
-        x = -365
+def detect_collision(paddle):
+    """Detect collision between ball and paddle and update angle"""
+    global angle, x, y
+    if paddle == left_pad:
+        if (-370 > ball.xcor() > -390) and (paddle.ycor() + 40 > ball.ycor() > paddle.ycor() - 40):
+            global x, angle, store_ball_y, store_ball_angle
+            angle = 180 - angle + y - paddle.ycor()  # angle modified according to impact position
+            while angle > 360:
+                angle = angle - 360
+            while angle < 0:
+                angle = angle + 360
+            x = -365
 
-        # store ball vert position and angle on contact with left paddle
-        store_ball_y = y
-        store_ball_angle = angle
+            # store ball vert position and angle on contact with left paddle
+            store_ball_y = y
+            store_ball_angle = angle
+
+def record_data(store_ball_y, store_ball_angle, paddle_y):
+    """Store ball and paddle data in a csv file"""
+    string = str(store_ball_y) + ',' + str(store_ball_angle) + ',' + str(paddle_y) + '\n'
+    print(string)
+    f = open('dataset.csv', 'a+')
+    if os.stat('dataset.csv').st_size == 0:
+        f.write('ball_y,ball_angle,paddle_y\n')
+    f.write(string)
+    f.close()
+
+def reset_game():
+    """Reset ball and paddles to starting positions"""
+    global x, y, angle, direction
+    x = 0
+    y = 0
+    angle = random.randint(-45, 45)
+    direction = -1
+    ball.goto(x, y)
+    left_pad.goto(-400, 0)
+    right_pad.goto(400, 0)
+
+while True:  # Main game loop
+    move_ball()
+    bounce_ball()
+
+    # automatic move left paddle
+    move_paddle(left_pad, y + random.randint(-40, 40))
+
+    # automatic move right paddle
+    move_paddle(right_pad, y + random.randint(-40, 40))
+
+    # detect ball collision with left paddle
+    if x < -370:
+        detect_collision(left_pad)
 
     # detect ball collision with right paddle
-    if (370 < ball.xcor() < 390) and (
-            right_pad.ycor() + 40 > ball.ycor() > right_pad.ycor() - 40):
-        # angle modified according to impact position
-        angle = 180 - angle - y + right_pad.ycor()
-        x = 365
-
-        # store right paddle vert pos
-        store_paddle_y = right_pad.ycor()
+    if x > 370:
+        store_paddle_y = right_pad.ycor()  # store right paddle vert pos
 
         # if ball already bounced on left paddle then store data on file
         if 'store_ball_y' in vars() and 'store_ball_angle' in vars():
-            string = str(store_ball_y) + ',' + str(store_ball_angle) + ',' + str(store_paddle_y) + '\n'
-            f = open('dataset.csv', 'a+')
-            if os.stat('dataset.csv').st_size == 0:
-                f.write('ball_y,ball_angle,paddle_y\n')
-            f.write(string)
-            f.close()
+            record_data(store_ball_y, store_ball_angle, store_paddle_y)
 
-        # restart after right paddle hit - for training purpose
-        x = 0
-        y = 0
-        angle = random.randint(-45, 45)
-        direction = -1
-        # reset data if already defined
-        if 'store_ball_y' in vars():
-            del store_ball_y
-        if 'store_ball_angle' in vars():
-            del store_ball_angle
-        if 'store_paddle_y' in vars():
-            del store_paddle_y
+        # restart game
+        reset_game()
 
-    # if ball over paddle then start new game
-    if x > 500 or x < -500:
-        x = 0
-        y = 0
-        angle = random.randint(-45, 45)
-        direction = -1
-        # reset data if already defined
-        if 'store_ball_y' in vars():
-            del store_ball_y
-        if 'store_ball_angle' in vars():
-            del store_ball_angle
-        if 'store_paddle_y' in vars():
-            del store_paddle_y
+    # detect paddle missed ball
+    if x < -500 or x > 500:
+
+        # restart game
+        reset_game()
