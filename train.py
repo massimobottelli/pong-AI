@@ -16,8 +16,6 @@ sc = turtle.Screen()
 sc.title("Pong-AI Training")
 sc.bgcolor("black")
 sc.setup(width=SCREEN_WIDTH, height=SCREEN_HEIGHT)
-
-# Draw center line
 sketch = turtle.Turtle()
 sketch.speed(0)
 sketch.color("white")
@@ -51,15 +49,6 @@ ball.color("white")
 ball.penup()
 ball.goto(0, 0)
 
-# Initialize ball
-x = 0
-y = 0
-store_ball_y = 0
-store_ball_angle = 0
-paddle_y = 0
-angle = random.randint(-45, 45)
-speed = BALL_SPEED
-direction = -1
 
 def move_ball():
     """Calculate and update ball position based on angle and speed"""
@@ -71,9 +60,11 @@ def move_ball():
     ball.setx(x)
     ball.sety(y)
 
-def move_paddle(paddle, y):
+
+def move_paddle(paddle, target_y):
     """Move paddle to specified y-coordinate"""
-    paddle.sety(y)
+    paddle.sety(target_y)
+
 
 def bounce_ball():
     """Bounce ball on top and bottom edges and update angle"""
@@ -85,25 +76,33 @@ def bounce_ball():
         y = -275
         angle = -angle
 
+
 def detect_collision(paddle):
     """Detect collision between ball and paddle and update angle"""
-    global angle, x, y
+    global angle, x, y, angle, store_ball_y, store_ball_angle
     if paddle == left_pad:
         if (-370 > ball.xcor() > -390) and (paddle.ycor() + 40 > ball.ycor() > paddle.ycor() - 40):
-            global x, angle, store_ball_y, store_ball_angle
-            angle = 180 - angle + y - paddle.ycor()  # angle modified according to impact position
-            while angle > 360:
-                angle = angle - 360
-            while angle < 0:
-                angle = angle + 360
-            x = -365
+            '''modify angle based on paddle impact position'''
+            angle = 180 - angle + y - paddle.ycor()
 
-            # store ball vert position and angle on contact with left paddle
+            '''store ball vert position and angle to save into dataset'''
             store_ball_y = y
             store_ball_angle = angle
 
+    if paddle == right_pad:
+        if (370 < ball.xcor() < 390) and (paddle.ycor() + 40 > ball.ycor() > paddle.ycor() - 40):
+            '''modify angle based on paddle impact position'''
+            angle = 180 - angle - y + paddle.ycor()
+
+    '''normalize angle'''
+    while angle > 360:
+        angle = angle - 360
+    while angle < 0:
+        angle = angle + 360
+
+
 def record_data(store_ball_y, store_ball_angle, paddle_y):
-    """Store ball and paddle data in a csv file"""
+    """Store ball and paddle data in dataset csv file"""
     string = str(store_ball_y) + ',' + str(store_ball_angle) + ',' + str(paddle_y) + '\n'
     print(string)
     f = open('dataset.csv', 'a+')
@@ -112,44 +111,54 @@ def record_data(store_ball_y, store_ball_angle, paddle_y):
     f.write(string)
     f.close()
 
+
 def reset_game():
     """Reset ball and paddles to starting positions"""
-    global x, y, angle, direction
+    global x, y, angle, direction, speed, store_ball_y, store_ball_angle, paddle_y
     x = 0
     y = 0
     angle = random.randint(-45, 45)
+    speed = BALL_SPEED
     direction = -1
-    ball.goto(x, y)
-    left_pad.goto(-400, 0)
-    right_pad.goto(400, 0)
+    store_ball_y = 0
+    store_ball_angle = 0
+    paddle_y = 0
 
-while True:  # Main game loop
+    ball.goto(x, y)
+    move_paddle(right_pad, 0)
+    move_paddle(left_pad, 0)
+
+
+'''initialize game to start'''
+x, y = 0, 0
+store_ball_y, store_ball_angle, store_paddle_y = 0, 0, 0
+reset_game()
+while True:
+    '''Main game loop'''
     move_ball()
     bounce_ball()
 
-    # automatic move left paddle
+    '''automatic move left paddle'''
     move_paddle(left_pad, y + random.randint(-40, 40))
 
-    # automatic move right paddle
+    '''automatic move right paddle'''
     move_paddle(right_pad, y + random.randint(-40, 40))
 
-    # detect ball collision with left paddle
+    '''detect ball collision with left paddle'''
     if x < -370:
         detect_collision(left_pad)
 
-    # detect ball collision with right paddle
+    '''detect ball collision with right paddle'''
     if x > 370:
-        store_paddle_y = right_pad.ycor()  # store right paddle vert pos
+        '''store right paddle vert pos'''
+        detect_collision(right_pad)
 
-        # if ball already bounced on left paddle then store data on file
+        store_paddle_y = right_pad.ycor()
+
+        '''if ball already bounced on left paddle then save ball and paddle data in dataset csv file'''
         if 'store_ball_y' in vars() and 'store_ball_angle' in vars():
             record_data(store_ball_y, store_ball_angle, store_paddle_y)
 
-        # restart game
-        reset_game()
-
-    # detect paddle missed ball
+    '''detect paddle missed ball'''
     if x < -500 or x > 500:
-
-        # restart game
         reset_game()
