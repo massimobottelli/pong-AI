@@ -78,23 +78,23 @@ def bounce_ball():
 
 
 def detect_collision(paddle):
-    """Detect collision between ball and paddle and update angle"""
+    # Detect collision between ball and paddle and update angle
     global angle, x, y, angle, store_ball_y, store_ball_angle
     if paddle == left_pad:
         if (-370 > ball.xcor() > -390) and (paddle.ycor() + 40 > ball.ycor() > paddle.ycor() - 40):
-            '''modify angle based on paddle impact position'''
+            # Modify angle based on paddle impact position
             angle = 180 - angle + y - paddle.ycor()
 
-            '''store ball vert position and angle to save into dataset'''
+            # Store ball vert position and angle to save into dataset
             store_ball_y = y
             store_ball_angle = angle
 
     if paddle == right_pad:
         if (370 < ball.xcor() < 390) and (paddle.ycor() + 40 > ball.ycor() > paddle.ycor() - 40):
-            '''modify angle based on paddle impact position'''
+            # Modify angle based on paddle impact position
             angle = 180 - angle - y + paddle.ycor()
 
-    '''normalize angle'''
+    # Normalize angle
     while angle > 360:
         angle = angle - 360
     while angle < 0:
@@ -117,7 +117,7 @@ def reset_game():
     global x, y, angle, direction, speed, store_ball_y, store_ball_angle, paddle_y
     x = 0
     y = 0
-    angle = random.randint(-45, 45)
+    angle = random.randint(-30, 30)
     speed = BALL_SPEED
     direction = -1
     store_ball_y = 0
@@ -129,36 +129,36 @@ def reset_game():
     move_paddle(left_pad, 0)
 
 
-'''initialize game to start'''
+# Initialize game to start
 x, y = 0, 0
 store_ball_y, store_ball_angle, store_paddle_y = 0, 0, 0
 reset_game()
 while True:
-    '''Main game loop'''
+   #  Main game loop
     move_ball()
     bounce_ball()
 
-    '''automatic move left paddle'''
+    #  Automatic move left paddle
     move_paddle(left_pad, y + random.randint(-40, 40))
 
-    '''automatic move right paddle'''
+    #  Automatic move right paddle
     move_paddle(right_pad, y + random.randint(-40, 40))
 
-    '''detect ball collision with left paddle'''
+    #  Detect ball collision with left paddle
     if x < -370:
         detect_collision(left_pad)
 
-    '''detect ball collision with right paddle'''
+    #  Detect ball collision with right paddle
     if x > 370:
-        '''store right paddle vert pos'''
+        # Store right paddle vert pos
         detect_collision(right_pad)
 
         store_paddle_y = right_pad.ycor()
 
-        '''if ball already bounced on left paddle then save ball and paddle data in dataset csv file'''
+        # Save ball and paddle data in dataset csv file
         if 'store_ball_y' in vars() and 'store_ball_angle' in vars():
             record_data(store_ball_y, store_ball_angle, store_paddle_y)
 
-    '''detect paddle missed ball'''
+    # Detect paddle missed ball
     if x < -500 or x > 500:
         reset_game()
